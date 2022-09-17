@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import useSound from "use-sound";
 import mySound from "../assets/sounds/done.mp3";
 
 export default function TodoForm(props) {
   const [input, setInput] = useState("");
   const [todosState, setTodosState] = useState(
-    // Local storage
     JSON.parse(localStorage.getItem("todos")) || []
   );
+
   const [playSound] = useSound(mySound);
 
   // Functions
@@ -50,7 +50,14 @@ export default function TodoForm(props) {
 
   // Components
   function TodosBoxes(props) {
-    return props.todoState.map(TodosBox());
+    // Put done tasks in the bottom
+
+    const todos = todosState.filter((todo) => todo.done === false);
+    const doneTodos = todosState.filter((todo) => todo.done === true);
+
+    const allTodos = [...todos, ...doneTodos];
+
+    return allTodos.map(TodosBox());
 
     function TodosBox() {
       return (todo) => {
@@ -58,7 +65,12 @@ export default function TodoForm(props) {
           <div key={todo.id} className="todo-box" style={taskBoxStyle()}>
             <div className="todo-box-start">
               <div className="todo-checkbox-ctn">
-                <input type="checkbox" className="todo-checkbox" checked={todo.done} onChange={checkboxHandleChange(event)} />
+                <input
+                  type="checkbox"
+                  className="todo-checkbox"
+                  checked={todo.done}
+                  onChange={checkboxHandleChange(event)}
+                />
               </div>
               <input
                 type="text"
@@ -78,7 +90,9 @@ export default function TodoForm(props) {
         );
 
         function taskDefaultValue() {
-          return JSON.parse(localStorage.getItem("todos")).find((todoState) => todoState.id === todo.id).text;
+          return JSON.parse(localStorage.getItem("todos")).find(
+            (todoState) => todoState.id === todo.id
+          ).text;
         }
 
         function taskBoxStyle() {
@@ -134,7 +148,14 @@ export default function TodoForm(props) {
     <>
       <div className="todo-form-fragment">
         <form className="todo-form" onSubmit={onSubmitForm}>
-          <input className="todo-input" type="text" placeholder="Add a todo..." value={input} name="text" onChange={handleChange} />
+          <input
+            className="todo-input"
+            type="text"
+            placeholder="Add a todo..."
+            value={input}
+            name="text"
+            onChange={handleChange}
+          />
           <button className="todo-add">Add</button>
         </form>
       </div>
@@ -144,7 +165,8 @@ export default function TodoForm(props) {
         ) : (
           <main className="todo-empty-ctn">
             <h1 className="todo-empty-text">
-              Empty! Click on <span className="todo-empty-spanadd">Add</span> to add a new task.
+              Empty! Click on <span className="todo-empty-spanadd">Add</span> to
+              add a new task.
             </h1>
           </main>
         )}
