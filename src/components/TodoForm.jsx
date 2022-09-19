@@ -1,6 +1,7 @@
 import React, {useState, useRef} from "react";
 import useSound from "use-sound";
 import mySound from "../assets/sounds/done.mp3";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 export default function TodoForm() {
   const [input, setInput] = useState("");
@@ -113,19 +114,41 @@ export default function TodoForm() {
                 />
               </div>
 
-              <div className="todo-subject-ctn">
+              <div
+                className="todo-subject-ctn"
+                onMouseEnter={() => {
+                  const newTodos = allTodos.map((todoState) => {
+                    if (todoState.id === todo.id) {
+                      todoState.dropDownOpened = !todoState.dropDownOpened;
+                    }
+                    return todoState;
+                  });
+                  localStorage.setItem("todos", JSON.stringify(newTodos));
+                  setTodosState(newTodos);
+                }}
+                onMouseLeave={() => {
+                  const newTodos = allTodos.map((todoState) => {
+                    if (todoState.id === todo.id) {
+                      todoState.dropDownOpened = !todoState.dropDownOpened;
+                    }
+                    return todoState;
+                  });
+                  localStorage.setItem("todos", JSON.stringify(newTodos));
+                  setTodosState(newTodos);
+                }}
+              >
                 <button
-                  onFocus={() => {
-                    const newTodos = allTodos.map((todoState) => {
-                      if (todoState.id === todo.id) {
-                        todoState.dropDownOpened = !todoState.dropDownOpened;
-                      }
-                      return todoState;
-                    });
-                    localStorage.setItem("todos", JSON.stringify(newTodos));
-                    setTodosState(newTodos);
-                  }}
                   className="todo-subject-btn-main"
+                  // onClick={() => {
+                  //   const newTodos = allTodos.map((todoState) => {
+                  //     if (todoState.id === todo.id) {
+                  //       todoState.dropDownOpened = !todoState.dropDownOpened;
+                  //     }
+                  //     return todoState;
+                  //   });
+                  //   localStorage.setItem("todos", JSON.stringify(newTodos));
+                  //   setTodosState(newTodos);
+                  // }}
                 >
                   {subject.find((subjectItem) => {
                     return subjectItem === todo.subject;
@@ -133,19 +156,7 @@ export default function TodoForm() {
                 </button>
 
                 {todo.dropDownOpened && (
-                  <div
-                    className="todo-subject-content"
-                    onBlur={() => {
-                      const newTodos = allTodos.map((todoState) => {
-                        if (todoState.id === todo.id) {
-                          todoState.dropDownOpened = false;
-                        }
-                        return todoState;
-                      });
-                      localStorage.setItem("todos", JSON.stringify(newTodos));
-                      setTodosState(newTodos);
-                    }}
-                  >
+                  <div className="todo-subject-content">
                     <input
                       type="text"
                       className="todo-subject-input"
@@ -201,23 +212,21 @@ export default function TodoForm() {
                           </button>
                           {/* Delete button for deleting subject */}
                           <button
+                            className="todo-subject-delete-btn"
                             onClick={() => {
-                              const newSubject = subject.filter(
-                                (subjectItem, subjectIndex) => {
-                                  return subjectIndex !== index;
+                              const newSubjects = subject.filter(
+                                (subjectItemState) => {
+                                  return subjectItemState !== subjectItem;
                                 }
                               );
-
                               localStorage.setItem(
                                 "subjects",
-                                JSON.stringify(newSubject)
+                                JSON.stringify(newSubjects)
                               );
-
-                              setSubject(newSubject);
+                              setSubject(newSubjects);
                             }}
-                            className="todo-subject-delete-btn"
                           >
-                            
+                            x
                           </button>
                         </div>
                       );
