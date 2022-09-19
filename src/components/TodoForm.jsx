@@ -1,12 +1,15 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import useSound from "use-sound";
 import mySound from "../assets/sounds/done.mp3";
 
-export default function TodoForm(props) {
+export default function TodoForm() {
   const [input, setInput] = useState("");
-  const [todosState, setTodosState] = useState(
-    JSON.parse(localStorage.getItem("todos")) || []
-  );
+  const [todosState, setTodosState] = useState(JSON.parse(localStorage.getItem("todos")) || []);
+  const [subject, setSubject] = useState(JSON.parse(localStorage.getItem("subjects")) || []);
+
+  React.useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todosState));
+  }, [todosState]);
 
   const [playSound] = useSound(mySound);
 
@@ -25,8 +28,10 @@ export default function TodoForm(props) {
     // Put in localStorage
     const todo = {
       id: Math.floor(Math.random() * 10000),
+      subject: "",
       text: input,
       done: false,
+      dropDownOpened: false,
     };
 
     const todos = JSON.parse(localStorage.getItem("todos")) || []; // If there is nothing in localStorage, set it to an empty array
@@ -49,9 +54,7 @@ export default function TodoForm(props) {
   }
 
   // Components
-  function TodosBoxes(props) {
-    // Put done tasks in the bottom
-
+  function TodosBoxes() {
     const todos = todosState.filter((todo) => todo.done === false);
     const doneTodos = todosState.filter((todo) => todo.done === true);
 
@@ -65,13 +68,68 @@ export default function TodoForm(props) {
           <div key={todo.id} className="todo-box" style={taskBoxStyle()}>
             <div className="todo-box-start">
               <div className="todo-checkbox-ctn">
-                <input
-                  type="checkbox"
-                  className="todo-checkbox"
-                  checked={todo.done}
-                  onChange={checkboxHandleChange(event)}
-                />
+                <input type="checkbox" className="todo-checkbox" checked={todo.done} onChange={checkboxHandleChange(event)} />
               </div>
+
+              <div className="todo-subject-ctn">
+                <button
+                  onClick={() => {
+                    const newTodos = allTodos.map((todoState) => {
+                      if (todoState.id === todo.id) {
+                        todoState.dropDownOpened = !todoState.dropDownOpened;
+                      }
+                      return todoState;
+                    });
+                    localStorage.setItem("todos", JSON.stringify(newTodos));
+                    setTodosState(newTodos);
+                  }}
+                  className="todo-subject-btn"
+                >
+                  {subject.find((subject) => {
+                    return subject === todo.subject;
+                  }) || "Subject"}
+                </button>
+
+                {todo.dropDownOpened && (
+                  <div className="todo-subject-content">
+                    {/* An input element that will push subjects to subject state */}
+
+                    {subject.map((subject) => {
+                      return (
+                        <button
+                          onClick={() => {
+                            const newTodos = allTodos.map((todoState) => {
+                              if (todoState.id === todo.id) {
+                                todoState.subject = subject;
+                              }
+                              return todoState;
+                            });
+                            localStorage.setItem("todos", JSON.stringify(newTodos));
+                            setTodosState(newTodos);
+                          }}
+                          className="todo-subject-btn"
+                          value="test"
+                          key={Math.floor(Math.random() * 10000)}
+                        >
+                          {subject}
+                        </button>
+                      );
+                    })}
+                    <input
+                      type="text"
+                      className="todo-subject-input"
+                      placeholder="Enter a subject"
+                      onChange={(event) => {
+                        const newSubject = event.target.value;
+                        const newSubjects = [...subject, newSubject];
+                        localStorage.setItem("subjects", JSON.stringify(newSubjects));
+                        setSubject(newSubjects);
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+
               <input
                 type="text"
                 className="todo-edit"
@@ -90,9 +148,7 @@ export default function TodoForm(props) {
         );
 
         function taskDefaultValue() {
-          return JSON.parse(localStorage.getItem("todos")).find(
-            (todoState) => todoState.id === todo.id
-          ).text;
+          return JSON.parse(localStorage.getItem("todos")).find((todoState) => todoState.id === todo.id).text;
         }
 
         function taskBoxStyle() {
@@ -148,14 +204,7 @@ export default function TodoForm(props) {
     <>
       <div className="todo-form-fragment">
         <form className="todo-form" onSubmit={onSubmitForm}>
-          <input
-            className="todo-input"
-            type="text"
-            placeholder="Add a todo..."
-            value={input}
-            name="text"
-            onChange={handleChange}
-          />
+          <input className="todo-input" type="text" placeholder="Add a todo..." value={input} name="text" onChange={handleChange} />
           <button className="todo-add">Add</button>
         </form>
       </div>
@@ -165,8 +214,7 @@ export default function TodoForm(props) {
         ) : (
           <main className="todo-empty-ctn">
             <h1 className="todo-empty-text">
-              Empty! Click on <span className="todo-empty-spanadd">Add</span> to
-              add a new task.
+              Empty! Click on <span className="todo-empty-spanadd">Add</span> to add a new task.
             </h1>
           </main>
         )}

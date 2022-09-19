@@ -188,8 +188,6 @@ button {
   right: 0;
   bottom: 0;
   z-index: 1;
-  /* Background blur that is available on all devices */
-  backdrop-filter: blur(10px);
 
   max-width: 100%;
 
@@ -303,4 +301,23 @@ button {
 
 .todo-delete:hover {
   color: rgb(212, 0, 0);
+}
+
+.todo-subject-ctn {
+  width: max-content;
+}
+
+.todo-subject-btn {
+  width: max-content;
+}
+
+.todo-subject-content {
+  position: absolute;
+  display: flex;
+  justify-content: stretch;
+  flex-direction: column;
+}
+
+.todo-subject-btn {
+  width: 100%;
 }
