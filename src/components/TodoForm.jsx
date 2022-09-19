@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import useSound from "use-sound";
 import mySound from "../assets/sounds/done.mp3";
 
@@ -95,7 +95,6 @@ export default function TodoForm() {
   function TodosBoxes() {
     const todos = todosState.filter((todo) => todo.done === false);
     const doneTodos = todosState.filter((todo) => todo.done === true);
-
     const allTodos = [...todos, ...doneTodos];
 
     return allTodos.map(TodosBox());
@@ -116,7 +115,7 @@ export default function TodoForm() {
 
               <div className="todo-subject-ctn">
                 <button
-                  onClick={() => {
+                  onFocus={() => {
                     const newTodos = allTodos.map((todoState) => {
                       if (todoState.id === todo.id) {
                         todoState.dropDownOpened = !todoState.dropDownOpened;
@@ -134,8 +133,19 @@ export default function TodoForm() {
                 </button>
 
                 {todo.dropDownOpened && (
-                  <div className="todo-subject-content">
-                    {/* An input element that will push subjects to subject state */}
+                  <div
+                    className="todo-subject-content"
+                    onBlur={() => {
+                      const newTodos = allTodos.map((todoState) => {
+                        if (todoState.id === todo.id) {
+                          todoState.dropDownOpened = false;
+                        }
+                        return todoState;
+                      });
+                      localStorage.setItem("todos", JSON.stringify(newTodos));
+                      setTodosState(newTodos);
+                    }}
+                  >
                     <input
                       type="text"
                       className="todo-subject-input"
@@ -207,7 +217,7 @@ export default function TodoForm() {
                             }}
                             className="todo-subject-delete-btn"
                           >
-                            ❌
+                            
                           </button>
                         </div>
                       );
