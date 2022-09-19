@@ -141,7 +141,11 @@ export default function TodoForm() {
                       className="todo-subject-input"
                       placeholder="Add a subject"
                       onKeyDown={(event) => {
-                        if (event.key === "Enter" || event.key === "Tab") {
+                        if (
+                          event.key === "Enter" ||
+                          event.key === "Tab" ||
+                          event.keyCode === 13
+                        ) {
                           if (event.target.value === "") {
                             return;
                           }
