@@ -161,6 +161,19 @@ export default function TodoForm() {
                           if (event.target.value === "") {
                             return;
                           }
+                          // Change the subject of the todo to the input value
+                          const newTodos = allTodos.map((todoState) => {
+                            if (todoState.id === todo.id) {
+                              todoState.subject = event.target.value;
+                            }
+                            return todoState;
+                          });
+                          localStorage.setItem(
+                            "todos",
+                            JSON.stringify(newTodos)
+                          );
+                          setTodosState(newTodos);
+
                           const newSubject = event.target.value;
                           const newSubjects = [...subject, newSubject];
                           localStorage.setItem(
