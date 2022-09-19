@@ -90,8 +90,7 @@ video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+  font-weight: 200;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -131,18 +130,17 @@ q:after {
   content: none;
 }
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
 * {
   font-family: "Inter", sans-serif;
   font-size: 12px;
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 .App {
+  font-family: "Inter", sans-serif;
+
   position: relative;
   margin: 0 auto;
   max-width: 500px;
@@ -154,7 +152,11 @@ table {
 }
 
 button {
-  max-width: 100px;
+  max-width: 100%;
+}
+
+.todo-empty-text {
+  font-family: "Inter", sans-serif;
 }
 
 .todo-empty-ctn {
@@ -180,7 +182,6 @@ button {
   color: black;
 }
 
-
 .todo-form-fragment {
   /* Center using transform translate */
   position: fixed;
@@ -190,8 +191,6 @@ button {
   z-index: 1;
 
   max-width: 100%;
-
-
 
   padding: 10px;
 }
@@ -226,10 +225,9 @@ button {
 
   padding: 0px 10px;
 
-  background-color: rgba(0, 0, 0, 0.00);
+  background-color: rgba(0, 0, 0, 0);
   color: black;
   border-bottom: 1px solid #e0e0e0;
-
 }
 
 .todo-box-start {
@@ -307,17 +305,68 @@ button {
   width: max-content;
 }
 
-.todo-subject-btn {
-  width: max-content;
-}
-
 .todo-subject-content {
   position: absolute;
   display: flex;
   justify-content: stretch;
   flex-direction: column;
+  z-index: 1;
+  border: 1px solid #ccc;
+}
+
+.todo-subject {
+  display: flex;
+  justify-content: stretch;
+  width: 100%;
+  padding: 0px 10px 10px 10px;
 }
 
 .todo-subject-btn {
   width: 100%;
+  border: none;
+  background-color: white;
+  text-align: left;
+  cursor: pointer;
+}
+
+.todo-subject-content {
+  /* Add smooth background shadow */
+
+  /* Add smooth background shadow */
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.15);
+  margin-top: 12px;
+}
+
+.todo-subject-btn-main {
+  gap: 10px;
+  padding: 5px 10px;
+  border: transparent;
+  border-radius: 5px;
+  width: max-content;
+  text-align: center;
+  cursor: pointer;
+}
+
+.todo-subject-input {
+  border: transparent;
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px 5px 0 0;
+}
+.todo-subject-input:focus {
+  outline: none;
+}
+
+.todo-subject-delete-btn {
+  border: transparent;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.todo-subject-subheader {
+  padding: 10px 10px 10px 10px;
+  font-size: 10px;
+  color: rgb(165, 165, 165);
 }

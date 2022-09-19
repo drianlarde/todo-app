@@ -1,14 +1,52 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import useSound from "use-sound";
 import mySound from "../assets/sounds/done.mp3";
 
 export default function TodoForm() {
   const [input, setInput] = useState("");
-  const [todosState, setTodosState] = useState(JSON.parse(localStorage.getItem("todos")) || []);
-  const [subject, setSubject] = useState(JSON.parse(localStorage.getItem("subjects")) || []);
+  const [todosState, setTodosState] = useState(
+    JSON.parse(localStorage.getItem("todos")) || []
+  );
+  const [subject, setSubject] = useState(
+    JSON.parse(localStorage.getItem("subjects")) || []
+  );
 
   React.useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todosState));
+  }, [todosState]);
+
+  React.useEffect(() => {
+    localStorage.setItem("subjects", JSON.stringify(subject));
+  }, [subject]);
+
+  React.useEffect(() => {
+    // Make todosState.dropDownOpened = false for all todos
+    const newTodosState = todosState.map((todo) => {
+      return {
+        ...todo,
+        dropDownOpened: false,
+      };
+    });
+    setTodosState(newTodosState);
+  }, []);
+
+  // If escape is pressed close all dropdowns
+  React.useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        const newTodosState = todosState.map((todo) => {
+          return {
+            ...todo,
+            dropDownOpened: false,
+          };
+        });
+        setTodosState(newTodosState);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, [todosState]);
 
   const [playSound] = useSound(mySound);
@@ -68,7 +106,12 @@ export default function TodoForm() {
           <div key={todo.id} className="todo-box" style={taskBoxStyle()}>
             <div className="todo-box-start">
               <div className="todo-checkbox-ctn">
-                <input type="checkbox" className="todo-checkbox" checked={todo.done} onChange={checkboxHandleChange(event)} />
+                <input
+                  type="checkbox"
+                  className="todo-checkbox"
+                  checked={todo.done}
+                  onChange={checkboxHandleChange(event)}
+                />
               </div>
 
               <div className="todo-subject-ctn">
@@ -83,49 +126,84 @@ export default function TodoForm() {
                     localStorage.setItem("todos", JSON.stringify(newTodos));
                     setTodosState(newTodos);
                   }}
-                  className="todo-subject-btn"
+                  className="todo-subject-btn-main"
                 >
-                  {subject.find((subject) => {
-                    return subject === todo.subject;
-                  }) || "Subject"}
+                  {subject.find((subjectItem) => {
+                    return subjectItem === todo.subject;
+                  }) || "Add subject"}
                 </button>
 
                 {todo.dropDownOpened && (
                   <div className="todo-subject-content">
                     {/* An input element that will push subjects to subject state */}
-
-                    {subject.map((subject) => {
-                      return (
-                        <button
-                          onClick={() => {
-                            const newTodos = allTodos.map((todoState) => {
-                              if (todoState.id === todo.id) {
-                                todoState.subject = subject;
-                              }
-                              return todoState;
-                            });
-                            localStorage.setItem("todos", JSON.stringify(newTodos));
-                            setTodosState(newTodos);
-                          }}
-                          className="todo-subject-btn"
-                          value="test"
-                          key={Math.floor(Math.random() * 10000)}
-                        >
-                          {subject}
-                        </button>
-                      );
-                    })}
                     <input
                       type="text"
                       className="todo-subject-input"
-                      placeholder="Enter a subject"
-                      onChange={(event) => {
-                        const newSubject = event.target.value;
-                        const newSubjects = [...subject, newSubject];
-                        localStorage.setItem("subjects", JSON.stringify(newSubjects));
-                        setSubject(newSubjects);
+                      placeholder="Add a subject"
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") {
+                          const newSubject = event.target.value;
+                          const newSubjects = [...subject, newSubject];
+                          localStorage.setItem(
+                            "subjects",
+                            JSON.stringify(newSubjects)
+                          );
+                          setSubject(newSubjects);
+                        }
                       }}
+                      autoFocus
+                      autoComplete="off"
                     />
+                    <font className="todo-subject-subheader">
+                      Select a subject or create one
+                    </font>
+                    {subject.map((subjectItem, index) => {
+                      return (
+                        <div className="todo-subject">
+                          <button
+                            onClick={() => {
+                              const newTodos = allTodos.map((todoState) => {
+                                if (todoState.id === todo.id) {
+                                  todoState.subject = subjectItem;
+                                  todoState.dropDownOpened = false;
+                                }
+                                return todoState;
+                              });
+                              localStorage.setItem(
+                                "todos",
+                                JSON.stringify(newTodos)
+                              );
+                              setTodosState(newTodos);
+                            }}
+                            className="todo-subject-btn"
+                            value="test"
+                            key={Math.floor(Math.random() * 10000)}
+                          >
+                            {subjectItem}
+                          </button>
+                          {/* Delete button for deleting subject */}
+                          <button
+                            onClick={() => {
+                              const newSubject = subject.filter(
+                                (subjectItem, subjectIndex) => {
+                                  return subjectIndex !== index;
+                                }
+                              );
+
+                              localStorage.setItem(
+                                "subjects",
+                                JSON.stringify(newSubject)
+                              );
+
+                              setSubject(newSubject);
+                            }}
+                            className="todo-subject-delete-btn"
+                          >
+                            ❌
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -148,7 +226,9 @@ export default function TodoForm() {
         );
 
         function taskDefaultValue() {
-          return JSON.parse(localStorage.getItem("todos")).find((todoState) => todoState.id === todo.id).text;
+          return JSON.parse(localStorage.getItem("todos")).find(
+            (todoState) => todoState.id === todo.id
+          ).text;
         }
 
         function taskBoxStyle() {
@@ -204,7 +284,16 @@ export default function TodoForm() {
     <>
       <div className="todo-form-fragment">
         <form className="todo-form" onSubmit={onSubmitForm}>
-          <input className="todo-input" type="text" placeholder="Add a todo..." value={input} name="text" onChange={handleChange} />
+          <input
+            className="todo-input"
+            type="text"
+            placeholder="Add a todo..."
+            value={input}
+            name="text"
+            onChange={handleChange}
+            autoFocus
+            autoComplete="off"
+          />
           <button className="todo-add">Add</button>
         </form>
       </div>
@@ -214,7 +303,8 @@ export default function TodoForm() {
         ) : (
           <main className="todo-empty-ctn">
             <h1 className="todo-empty-text">
-              Empty! Click on <span className="todo-empty-spanadd">Add</span> to add a new task.
+              Empty! Click on <span className="todo-empty-spanadd">Add</span> to
+              add a new task.
             </h1>
           </main>
         )}
