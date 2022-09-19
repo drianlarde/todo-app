@@ -141,7 +141,10 @@ export default function TodoForm() {
                       className="todo-subject-input"
                       placeholder="Add a subject"
                       onKeyDown={(event) => {
-                        if (event.key === "Enter") {
+                        if (event.key === "Enter" || event.key === "Tab") {
+                          if (event.target.value === "") {
+                            return;
+                          }
                           const newSubject = event.target.value;
                           const newSubjects = [...subject, newSubject];
                           localStorage.setItem(
