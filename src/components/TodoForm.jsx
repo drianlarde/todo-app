@@ -144,7 +144,7 @@ export default function TodoForm() {
                         if (
                           event.key === "Enter" ||
                           event.key === "Tab" ||
-                          event.keyCode === 13
+                          event.keyCode === 13 ||
                           event.keyCode === 9
                         ) {
                           if (event.target.value === "") {
