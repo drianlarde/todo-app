@@ -119,7 +119,8 @@ export default function TodoForm() {
                 onMouseEnter={() => {
                   const newTodos = allTodos.map((todoState) => {
                     if (todoState.id === todo.id) {
-                      todoState.dropDownOpened = !todoState.dropDownOpened;
+                      todoState.dropDownOpened = true;
+                      // todoState.dropDownOpened = !todoState.dropDownOpened;
                     }
                     return todoState;
                   });
@@ -129,7 +130,8 @@ export default function TodoForm() {
                 onMouseLeave={() => {
                   const newTodos = allTodos.map((todoState) => {
                     if (todoState.id === todo.id) {
-                      todoState.dropDownOpened = !todoState.dropDownOpened;
+                      todoState.dropDownOpened = false;
+                      // todoState.dropDownOpened = !todoState.dropDownOpened;
                     }
                     return todoState;
                   });
@@ -137,19 +139,7 @@ export default function TodoForm() {
                   setTodosState(newTodos);
                 }}
               >
-                <button
-                  className="todo-subject-btn-main"
-                  // onClick={() => {
-                  //   const newTodos = allTodos.map((todoState) => {
-                  //     if (todoState.id === todo.id) {
-                  //       todoState.dropDownOpened = !todoState.dropDownOpened;
-                  //     }
-                  //     return todoState;
-                  //   });
-                  //   localStorage.setItem("todos", JSON.stringify(newTodos));
-                  //   setTodosState(newTodos);
-                  // }}
-                >
+                <button className="todo-subject-btn-main">
                   {subject.find((subjectItem) => {
                     return subjectItem === todo.subject;
                   }) || "Add subject"}
