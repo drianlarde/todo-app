@@ -12,6 +12,17 @@ export default function TodoForm() {
     JSON.parse(localStorage.getItem("subjects")) || []
   );
   const [playSound] = useSound(mySound);
+  const inputRef = useRef(null);
+  React.useEffect(() => {
+    // When '/' is pressed, focus on the input
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "/") {
+        inputRef.current.focus();
+        e.preventDefault();
+      }
+    });
+  });
 
   React.useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todosState));
@@ -359,6 +370,7 @@ export default function TodoForm() {
       <div className="todo-form-fragment">
         <form className="todo-form" onSubmit={onSubmitForm}>
           <input
+            ref={inputRef}
             className="todo-input"
             type="text"
             placeholder="Add a todo..."
