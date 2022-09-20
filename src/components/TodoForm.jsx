@@ -116,6 +116,7 @@ export default function TodoForm() {
               <div className="todo-subject-ctn">
                 <button
                   className="todo-subject-btn-main"
+                  style={taskEditStyle()}
                   onClick={() => {
                     const todos =
                       JSON.parse(localStorage.getItem("todos")) || [];
@@ -137,8 +138,7 @@ export default function TodoForm() {
                     return subjectItem === todo.subject;
                   }) || "Add subject"}
                 </button>
-
-                {todo.dropDownOpened && (
+                {todo.dropDownOpened ? (
                   <div className="todo-subject-content">
                     <input
                       type="text"
@@ -185,7 +185,7 @@ export default function TodoForm() {
                     </font>
                     {subject.map((subjectItem, index) => {
                       return (
-                        <div className="todo-subject">
+                        <div className="todo-subject" key={index}>
                           <button
                             onClick={() => {
                               const todos =
@@ -231,7 +231,7 @@ export default function TodoForm() {
                       );
                     })}
                   </div>
-                )}
+                ) : null}
               </div>
 
               <input
@@ -269,6 +269,7 @@ export default function TodoForm() {
             textDecoration: todo.done ? "line-through" : "none",
             opacity: todo.done ? 0.3 : 1,
             pointerEvents: todo.done ? "none" : "auto",
+            // Not tabbable
           };
         }
 
