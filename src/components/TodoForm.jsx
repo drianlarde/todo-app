@@ -221,6 +221,17 @@ export default function TodoForm() {
                                 "subjects",
                                 JSON.stringify(newSubjects)
                               );
+                              localStorage.setItem(
+                                "todos",
+                                JSON.stringify(
+                                  todosState.map((todoState) => {
+                                    if (todoState.subject === subjectItem) {
+                                      todoState.subject = "";
+                                    }
+                                    return todoState;
+                                  })
+                                )
+                              );
                               setSubject(newSubjects);
                             }}
                           >
