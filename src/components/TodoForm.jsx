@@ -101,15 +101,22 @@ export default function TodoForm() {
           event.target.className !== "todo-subject-content" &&
           event.target.className !== "todo-subject-btn" &&
           event.target.className !== "todo-subject" &&
-          event.target.className !== "todo-subject-btn-main"
+          event.target.className !== "todo-subject-btn-main" &&
+          event.target.className !== "todo-edit"
         ) {
-          const newTodosState = todosState.map((todo) => {
+          // Get localStorage
+          console.log("event.target.className", event.target.className);
+          const todos = JSON.parse(localStorage.getItem("todos")) || [];
+          const newTodos = todos.map((todo) => {
             return {
               ...todo,
               dropDownOpened: false,
             };
           });
-          setTodosState(newTodosState);
+          localStorage.setItem("todos", JSON.stringify(newTodos));
+          setTodosState(newTodos);
+        } else if (event.target.className === "todo-edit") {
+          return;
         }
       }
       document.addEventListener("click", handler);
