@@ -122,7 +122,6 @@ export default function TodoForm() {
                       JSON.parse(localStorage.getItem("todos")) || [];
                     const newTodos = todos.map((todoState) => {
                       if (todoState.id === todo.id) {
-                        // todoState.dropDownOpened = true;
                         todoState.dropDownOpened = !todoState.dropDownOpened;
                       } else {
                         todoState.dropDownOpened = false;
@@ -225,7 +224,10 @@ export default function TodoForm() {
                               setSubject(newSubjects);
                             }}
                           >
-                            x
+                            <RemoveCircleIcon
+                              fontSize="small"
+                              htmlColor="#ccc"
+                            />
                           </button>
                         </div>
                       );
