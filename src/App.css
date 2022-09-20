@@ -383,3 +383,8 @@ button {
   font-size: 10px;
   color: rgb(165, 165, 165);
 }
+
+.css-ptiqhd-MuiSvgIcon-root:hover {
+  color: rgb(194, 31, 31);
+  transition: all 0.15s ease-in-out;
+}

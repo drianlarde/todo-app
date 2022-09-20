@@ -14,8 +14,6 @@ export default function TodoForm() {
   const [playSound] = useSound(mySound);
   const inputRef = useRef(null);
   React.useEffect(() => {
-    // When '/' is pressed, focus on the input
-
     document.addEventListener("keydown", (e) => {
       if (e.key === "/") {
         inputRef.current.focus();
@@ -126,8 +124,6 @@ export default function TodoForm() {
           });
           localStorage.setItem("todos", JSON.stringify(newTodos));
           setTodosState(newTodos);
-        } else if (event.target.className === "todo-edit") {
-          return;
         }
       }
       document.addEventListener("click", handler);
@@ -184,20 +180,22 @@ export default function TodoForm() {
                 {todo.dropDownOpened ? (
                   <div className="todo-subject-content" ref={container}>
                     <input
-                      type="text"
                       className="todo-subject-input"
+                      type="text"
                       placeholder="Add a subject"
+                      name="subjectText"
                       onKeyDown={(event) => {
-                        if (
-                          event.key === "Enter" ||
-                          event.key === "Tab" ||
-                          event.keyCode === 13 ||
-                          event.keyCode === 9 ||
-                          event.keyCode === 66
-                        ) {
+                        if (event.key === "Enter") {
                           if (event.target.value === "") {
                             return;
+                          } else if (
+                            subject.find((subjectItem) => {
+                              return subjectItem === event.target.value;
+                            })
+                          ) {
+                            return;
                           }
+
                           const todos =
                             JSON.parse(localStorage.getItem("todos")) || [];
                           const newTodos = todos.map((todoState) => {
@@ -263,10 +261,12 @@ export default function TodoForm() {
                                   return subjectItemState !== subjectItem;
                                 }
                               );
+
                               localStorage.setItem(
                                 "subjects",
                                 JSON.stringify(newSubjects)
                               );
+
                               localStorage.setItem(
                                 "todos",
                                 JSON.stringify(
@@ -300,6 +300,10 @@ export default function TodoForm() {
                 defaultValue={taskDefaultValue()}
                 placeholder="Enter a task"
                 onChange={editHandleChange()}
+                onClick={(e) => {
+                  e.target.select();
+                }}
+                autoCorrect="off"
               />
             </div>
             <div className="todo-box-end">
