@@ -93,6 +93,32 @@ export default function TodoForm() {
 
   // Components
   function TodosBoxes() {
+    React.useEffect(() => {
+      function handler(event) {
+        if (
+          event.target.className !== "todo-subject-input" &&
+          event.target.className !== "todo-subject-subheader" &&
+          event.target.className !== "todo-subject-content" &&
+          event.target.className !== "todo-subject-btn" &&
+          event.target.className !== "todo-subject" &&
+          event.target.className !== "todo-subject-btn-main"
+        ) {
+          const newTodosState = todosState.map((todo) => {
+            return {
+              ...todo,
+              dropDownOpened: false,
+            };
+          });
+          setTodosState(newTodosState);
+        }
+      }
+      document.addEventListener("click", handler);
+      return () => {
+        document.removeEventListener("click", handler);
+      };
+    });
+    const container = useRef(null);
+
     const todos = todosState.filter((todo) => todo.done === false);
     const doneTodos = todosState.filter((todo) => todo.done === true);
     const allTodos = [...todos, ...doneTodos];
@@ -138,7 +164,7 @@ export default function TodoForm() {
                   }) || "Add subject"}
                 </button>
                 {todo.dropDownOpened ? (
-                  <div className="todo-subject-content">
+                  <div className="todo-subject-content" ref={container}>
                     <input
                       type="text"
                       className="todo-subject-input"
@@ -208,6 +234,7 @@ export default function TodoForm() {
                           >
                             {subjectItem}
                           </button>
+
                           {/* Delete button for deleting subject */}
                           <button
                             className="todo-subject-delete-btn"

@@ -373,6 +373,9 @@ button {
   border: transparent;
   background-color: transparent;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .todo-subject-subheader {
