@@ -11,6 +11,7 @@ export default function TodoForm() {
   const [subject, setSubject] = useState(
     JSON.parse(localStorage.getItem("subjects")) || []
   );
+  const [playSound] = useSound(mySound);
 
   React.useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todosState));
@@ -49,8 +50,6 @@ export default function TodoForm() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [todosState]);
-
-  const [playSound] = useSound(mySound);
 
   // Functions
   function handleChange(event) {
@@ -114,32 +113,26 @@ export default function TodoForm() {
                 />
               </div>
 
-              <div
-                className="todo-subject-ctn"
-                onMouseEnter={() => {
-                  const newTodos = allTodos.map((todoState) => {
-                    if (todoState.id === todo.id) {
-                      todoState.dropDownOpened = true;
-                      // todoState.dropDownOpened = !todoState.dropDownOpened;
-                    }
-                    return todoState;
-                  });
-                  localStorage.setItem("todos", JSON.stringify(newTodos));
-                  setTodosState(newTodos);
-                }}
-                onMouseLeave={() => {
-                  const newTodos = allTodos.map((todoState) => {
-                    if (todoState.id === todo.id) {
-                      todoState.dropDownOpened = false;
-                      // todoState.dropDownOpened = !todoState.dropDownOpened;
-                    }
-                    return todoState;
-                  });
-                  localStorage.setItem("todos", JSON.stringify(newTodos));
-                  setTodosState(newTodos);
-                }}
-              >
-                <button className="todo-subject-btn-main">
+              <div className="todo-subject-ctn">
+                <button
+                  className="todo-subject-btn-main"
+                  onClick={() => {
+                    const todos =
+                      JSON.parse(localStorage.getItem("todos")) || [];
+                    const newTodos = todos.map((todoState) => {
+                      if (todoState.id === todo.id) {
+                        // todoState.dropDownOpened = true;
+                        todoState.dropDownOpened = !todoState.dropDownOpened;
+                      } else {
+                        todoState.dropDownOpened = false;
+                      }
+                      return todoState;
+                    });
+
+                    localStorage.setItem("todos", JSON.stringify(newTodos));
+                    setTodosState(newTodos);
+                  }}
+                >
                   {subject.find((subjectItem) => {
                     return subjectItem === todo.subject;
                   }) || "Add subject"}
@@ -161,8 +154,9 @@ export default function TodoForm() {
                           if (event.target.value === "") {
                             return;
                           }
-                          // Change the subject of the todo to the input value
-                          const newTodos = allTodos.map((todoState) => {
+                          const todos =
+                            JSON.parse(localStorage.getItem("todos")) || [];
+                          const newTodos = todos.map((todoState) => {
                             if (todoState.id === todo.id) {
                               todoState.subject = event.target.value;
                             }
@@ -194,7 +188,9 @@ export default function TodoForm() {
                         <div className="todo-subject">
                           <button
                             onClick={() => {
-                              const newTodos = allTodos.map((todoState) => {
+                              const todos =
+                                JSON.parse(localStorage.getItem("todos")) || [];
+                              const newTodos = todos.map((todoState) => {
                                 if (todoState.id === todo.id) {
                                   todoState.subject = subjectItem;
                                   todoState.dropDownOpened = false;
