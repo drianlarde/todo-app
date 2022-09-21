@@ -105,26 +105,6 @@ export default function TodoForm() {
     React.useEffect(() => {
       function handler(event) {
         console.log("event.target", event.target.className);
-        // if (
-        //   event.target.className !== "todo-subject-input" &&
-        //   event.target.className !== "todo-subject-subheader" &&
-        //   event.target.className !== "todo-subject-content" &&
-        //   event.target.className !== "todo-subject-btn" &&
-        //   event.target.className !== "todo-subject" &&
-        //   event.target.className !== "todo-subject-btn-main" &&
-        //   event.target.className !== "todo-edit"
-        // ) {
-        //   // Get localStorage
-        //   const todos = JSON.parse(localStorage.getItem("todos")) || [];
-        //   const newTodos = todos.map((todo) => {
-        //     return {
-        //       ...todo,
-        //       dropDownOpened: false,
-        //     };
-        //   });
-        //   localStorage.setItem("todos", JSON.stringify(newTodos));
-        //   setTodosState(newTodos);
-        // }
 
         if (
           event.target.className === "todo-subject-input" ||
@@ -430,18 +410,25 @@ export default function TodoForm() {
           <button className="todo-add">Add</button>
         </form>
       </div>
-      <div className="todo-main">
-        {todosState.length > 0 ? (
+      {todosState.length > 0 ? (
+        <div className="todo-main">
           <TodosBoxes todoState={todosState} />
-        ) : (
+        </div>
+      ) : (
+        <div
+          className="todo-main"
+          style={{
+            paddingBottom: "0px",
+          }}
+        >
           <main className="todo-empty-ctn">
             <h1 className="todo-empty-text">
               Empty! Click on <span className="todo-empty-spanadd">Add</span> to
               add a new task.
             </h1>
           </main>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 }

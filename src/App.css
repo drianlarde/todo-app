@@ -150,7 +150,7 @@ q:after {
 }
 
 .todo-main {
-  margin-bottom: 50px;
+  padding-bottom: 300px;
 }
 
 button {
@@ -195,6 +195,10 @@ button {
   max-width: 100%;
 
   padding: 10px;
+  /* Add background blur */
+
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(0px);
 }
 
 .todo-form {
