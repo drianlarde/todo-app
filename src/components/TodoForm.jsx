@@ -181,33 +181,6 @@ export default function TodoForm() {
                     <form
                       onSubmit={(event) => {
                         event.preventDefault();
-                        // if (event.key === "Enter") {
-                        if (event.target.value === "") {
-                          return;
-                        } else if (
-                          subject.find((subjectItem) => {
-                            return subjectItem === event.target.value;
-                          })
-                        ) {
-                          return;
-                        }
-                        const todos =
-                          JSON.parse(localStorage.getItem("todos")) || [];
-                        const newTodos = todos.map((todoState) => {
-                          if (todoState.id === todo.id) {
-                            todoState.subject = event.target.value;
-                          }
-                          return todoState;
-                        });
-                        localStorage.setItem("todos", JSON.stringify(newTodos));
-                        setTodosState(newTodos);
-                        const newSubject = event.target.value;
-                        const newSubjects = [...subject, newSubject];
-                        localStorage.setItem(
-                          "subjects",
-                          JSON.stringify(newSubjects)
-                        );
-                        setSubject(newSubjects);
                       }}
                       className="todo-subject-input-form"
                     >
@@ -216,7 +189,39 @@ export default function TodoForm() {
                         type="text"
                         placeholder="Add a subject"
                         name="subjectText"
-                        // onKeyDown={}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter") {
+                            if (event.target.value === "") {
+                              return;
+                            } else if (
+                              subject.find((subjectItem) => {
+                                return subjectItem === event.target.value;
+                              })
+                            ) {
+                              return;
+                            }
+                            const todos =
+                              JSON.parse(localStorage.getItem("todos")) || [];
+                            const newTodos = todos.map((todoState) => {
+                              if (todoState.id === todo.id) {
+                                todoState.subject = event.target.value;
+                              }
+                              return todoState;
+                            });
+                            localStorage.setItem(
+                              "todos",
+                              JSON.stringify(newTodos)
+                            );
+                            setTodosState(newTodos);
+                            const newSubject = event.target.value;
+                            const newSubjects = [...subject, newSubject];
+                            localStorage.setItem(
+                              "subjects",
+                              JSON.stringify(newSubjects)
+                            );
+                            setSubject(newSubjects);
+                          }
+                        }}
                         autoFocus
                         autoComplete="off"
                       />
