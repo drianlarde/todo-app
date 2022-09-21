@@ -1,6 +1,6 @@
 import React, {useState, useRef} from "react";
 import useSound from "use-sound";
-import mySound from "../assets/sounds/done.mp3";
+import mySound from "/sounds/done.mp3";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 
 export default function TodoForm() {
@@ -312,7 +312,7 @@ export default function TodoForm() {
                             }}
                           >
                             <img
-                              src="./src/assets/images/remove-icon.svg"
+                              src="/images/remove-icon.svg"
                               alt="remove-icon"
                               className="todo-subject-delete-icon"
                             />
