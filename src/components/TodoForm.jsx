@@ -114,7 +114,6 @@ export default function TodoForm() {
           event.target.className !== "todo-edit"
         ) {
           // Get localStorage
-          console.log("event.target.className", event.target.className);
           const todos = JSON.parse(localStorage.getItem("todos")) || [];
           const newTodos = todos.map((todo) => {
             return {
@@ -179,49 +178,49 @@ export default function TodoForm() {
                 </button>
                 {todo.dropDownOpened ? (
                   <div className="todo-subject-content" ref={container}>
-                    <input
-                      className="todo-subject-input"
-                      type="text"
-                      placeholder="Add a subject"
-                      name="subjectText"
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                          if (event.target.value === "") {
-                            return;
-                          } else if (
-                            subject.find((subjectItem) => {
-                              return subjectItem === event.target.value;
-                            })
-                          ) {
-                            return;
-                          }
-
-                          const todos =
-                            JSON.parse(localStorage.getItem("todos")) || [];
-                          const newTodos = todos.map((todoState) => {
-                            if (todoState.id === todo.id) {
-                              todoState.subject = event.target.value;
-                            }
-                            return todoState;
-                          });
-                          localStorage.setItem(
-                            "todos",
-                            JSON.stringify(newTodos)
-                          );
-                          setTodosState(newTodos);
-
-                          const newSubject = event.target.value;
-                          const newSubjects = [...subject, newSubject];
-                          localStorage.setItem(
-                            "subjects",
-                            JSON.stringify(newSubjects)
-                          );
-                          setSubject(newSubjects);
+                    <form
+                      onSubmit={(event) => {
+                        event.preventDefault();
+                        // if (event.key === "Enter") {
+                        if (event.target.value === "") {
+                          return;
+                        } else if (
+                          subject.find((subjectItem) => {
+                            return subjectItem === event.target.value;
+                          })
+                        ) {
+                          return;
                         }
+                        const todos =
+                          JSON.parse(localStorage.getItem("todos")) || [];
+                        const newTodos = todos.map((todoState) => {
+                          if (todoState.id === todo.id) {
+                            todoState.subject = event.target.value;
+                          }
+                          return todoState;
+                        });
+                        localStorage.setItem("todos", JSON.stringify(newTodos));
+                        setTodosState(newTodos);
+                        const newSubject = event.target.value;
+                        const newSubjects = [...subject, newSubject];
+                        localStorage.setItem(
+                          "subjects",
+                          JSON.stringify(newSubjects)
+                        );
+                        setSubject(newSubjects);
                       }}
-                      autoFocus
-                      autoComplete="off"
-                    />
+                      className="todo-subject-input-form"
+                    >
+                      <input
+                        className="todo-subject-input"
+                        type="text"
+                        placeholder="Add a subject"
+                        name="subjectText"
+                        // onKeyDown={}
+                        autoFocus
+                        autoComplete="off"
+                      />
+                    </form>
                     <font className="todo-subject-subheader">
                       Select a subject or create one
                     </font>
@@ -263,11 +262,6 @@ export default function TodoForm() {
                               );
 
                               localStorage.setItem(
-                                "subjects",
-                                JSON.stringify(newSubjects)
-                              );
-
-                              localStorage.setItem(
                                 "todos",
                                 JSON.stringify(
                                   todosState.map((todoState) => {
@@ -277,6 +271,10 @@ export default function TodoForm() {
                                     return todoState;
                                   })
                                 )
+                              );
+                              localStorage.setItem(
+                                "subjects",
+                                JSON.stringify(newSubjects)
                               );
                               setSubject(newSubjects);
                             }}
@@ -300,9 +298,6 @@ export default function TodoForm() {
                 defaultValue={taskDefaultValue()}
                 placeholder="Enter a task"
                 onChange={editHandleChange()}
-                onClick={(e) => {
-                  e.target.select();
-                }}
                 autoCorrect="off"
               />
             </div>
