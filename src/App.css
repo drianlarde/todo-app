@@ -384,7 +384,16 @@ button {
   color: rgb(165, 165, 165);
 }
 
-.css-ptiqhd-MuiSvgIcon-root:hover {
-  color: rgb(194, 31, 31);
+.todo-subject-delete-icon {
+  /* Change color of svg */
+  filter: invert(27%) sepia(51%) saturate(0%) hue-rotate(346deg)
+    brightness(104%) contrast(97%);
+  opacity: 30%;
+}
+.todo-subject-delete-icon:hover {
+  /* Change color of svg */
+  opacity: 100%;
+  filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg)
+    brightness(104%) contrast(97%);
   transition: all 0.15s ease-in-out;
 }

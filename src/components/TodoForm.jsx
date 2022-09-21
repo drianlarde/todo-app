@@ -104,15 +104,41 @@ export default function TodoForm() {
   function TodosBoxes() {
     React.useEffect(() => {
       function handler(event) {
+        console.log("event.target", event.target.className);
+        // if (
+        //   event.target.className !== "todo-subject-input" &&
+        //   event.target.className !== "todo-subject-subheader" &&
+        //   event.target.className !== "todo-subject-content" &&
+        //   event.target.className !== "todo-subject-btn" &&
+        //   event.target.className !== "todo-subject" &&
+        //   event.target.className !== "todo-subject-btn-main" &&
+        //   event.target.className !== "todo-edit"
+        // ) {
+        //   // Get localStorage
+        //   const todos = JSON.parse(localStorage.getItem("todos")) || [];
+        //   const newTodos = todos.map((todo) => {
+        //     return {
+        //       ...todo,
+        //       dropDownOpened: false,
+        //     };
+        //   });
+        //   localStorage.setItem("todos", JSON.stringify(newTodos));
+        //   setTodosState(newTodos);
+        // }
+
         if (
-          event.target.className !== "todo-subject-input" &&
-          event.target.className !== "todo-subject-subheader" &&
-          event.target.className !== "todo-subject-content" &&
-          event.target.className !== "todo-subject-btn" &&
-          event.target.className !== "todo-subject" &&
-          event.target.className !== "todo-subject-btn-main" &&
-          event.target.className !== "todo-edit"
+          event.target.className === "todo-subject-input" ||
+          event.target.className === "todo-subject-subheader" ||
+          event.target.className === "todo-subject-content" ||
+          event.target.className === "todo-subject-btn" ||
+          event.target.className === "todo-subject" ||
+          event.target.className === "todo-subject-btn-main" ||
+          event.target.className === "todo-edit" ||
+          event.target.className === "todo-subject-delete-icon" ||
+          event.target.className === "todo-subject-delete-btn"
         ) {
+          return;
+        } else {
           // Get localStorage
           const todos = JSON.parse(localStorage.getItem("todos")) || [];
           const newTodos = todos.map((todo) => {
@@ -260,12 +286,12 @@ export default function TodoForm() {
                           <button
                             className="todo-subject-delete-btn"
                             onClick={() => {
+                              // Don't close all dropdowns
                               const newSubjects = subject.filter(
                                 (subjectItemState) => {
                                   return subjectItemState !== subjectItem;
                                 }
                               );
-
                               localStorage.setItem(
                                 "todos",
                                 JSON.stringify(
@@ -282,11 +308,13 @@ export default function TodoForm() {
                                 JSON.stringify(newSubjects)
                               );
                               setSubject(newSubjects);
+                              // Maintain open dropdowns
                             }}
                           >
-                            <RemoveCircleIcon
-                              fontSize="small"
-                              htmlColor="#ccc"
+                            <img
+                              src="./src/assets/images/remove-icon.svg"
+                              alt="remove-icon"
+                              className="todo-subject-delete-icon"
                             />
                           </button>
                         </div>
