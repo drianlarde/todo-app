@@ -246,6 +246,20 @@ export default function TodoForm() {
                               JSON.stringify(newSubjects)
                             );
                             setSubject(newSubjects);
+
+                            // Close all dropdowns
+
+                            const todos2 =
+                              JSON.parse(localStorage.getItem("todos")) || [];
+                            const newTodos2 = todos2.map((todoState) => {
+                              todoState.dropDownOpened = false;
+                              return todoState;
+                            });
+                            localStorage.setItem(
+                              "todos",
+                              JSON.stringify(newTodos2)
+                            );
+                            setTodosState(newTodos2);
                           }
                         }}
                         autoFocus
