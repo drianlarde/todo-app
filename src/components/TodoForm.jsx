@@ -15,7 +15,7 @@ export default function TodoForm() {
   const inputRef = useRef(null);
   React.useEffect(() => {
     document.addEventListener("keydown", (e) => {
-      if (e.key === "/") {
+      if (e.key === "/" && document.activeElement !== inputRef.current) {
         inputRef.current.focus();
         e.preventDefault();
       }
